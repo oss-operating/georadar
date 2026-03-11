@@ -1,57 +1,27 @@
 # CLAUDE.md
 
-## Project Overview
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-**georadar** - A set of tools to identify geo problems and improve them.
+## Development Rules
 
-> "GEO" in this context refers to **Geo-Optimized/SEO for AI/RAG systems** - optimizing web content so that AI models can correctly parse, understand, and represent your project.
+1. Before writing any code, describe your approach and wait for approval.
 
-The project aims to diagnose and fix issues where AI models fail to correctly understand or represent a project (e.g., missing from training data, outdated information, incorrect descriptions).
+2. If the requirements I give you are ambiguous, ask clarifying questions before writing any code.
 
----
+3. After you finish writing any code, list the edge cases and suggest test cases to cover them.
 
-## Project Structure
+4. If a task requires changes to more than 3 files, stop and break it into smaller tasks first.
 
-```
-georadar/
-├── CLAUDE.md              # This file
-├── README.md              # Brief project description
-├── examples/              # Diagnosis reports and examples
-│   └── mindspore-geo-diagnosis.md
-└── src/                   # Source code (to be added)
-    └── (tools to be implemented)
-```
+5. When there's a bug, start by writing a test that reproduces it, then fix it until the test passes.
 
----
+6. Every time I correct you, reflect on what you did wrong and come up with a plan to never make the same mistake again.
 
-## Conventions
+7. Before every git commit, you MUST run `/release-skills` first to update CHANGELOG.md. Do not commit without updating the changelog.
 
-### Diagnosis Reports (examples/)
+8. When creating new skills, you MUST use `/skill-creator` to scaffold and structure the skill. After creation, verify the new skill conforms to the agentskills.io spec (correct SKILL.md frontmatter, directory structure, procedural instructions).
 
-- Use Markdown format with clear hierarchy
-- Include diagnostic date and target URL
-- Use severity tags: 🔴 P0 (critical), 🟠 P1 (important), 🟡 P2 (improvement)
-- Include verification steps for quick testing
+9. At the start of every new conversation, IMMEDIATELY read `CLAUDE-RESUME.md` to restore project context, current status, and pending TODOs before doing anything else.
 
-### Naming
+10. After completing any task that changes project state (file creation/modification, TODO completion, new decisions, architecture changes), you MUST update `CLAUDE-RESUME.md` accordingly — keep the "Current Status", "TODO", and "Recent Changes" sections accurate and up to date.
 
-- Project: `georadar` (lowercase, no separators)
-- Files: `kebab-case.md`
-- Diagnosis reports: `{project-name}-geo-diagnosis.md`
-
----
-
-## Quick Start
-
-This is a new project. Current status:
-
-- [x] Initial repository setup
-- [x] First diagnosis example (MindSpore)
-- [ ] Add source code tools
-- [ ] Expand diagnosis coverage
-
----
-
-## Commands
-
-No commands yet - source code to be added.
+11. Do NOT just agree with my ideas. Think independently, challenge assumptions, and proactively suggest better alternatives or broader perspectives when you see an opportunity.

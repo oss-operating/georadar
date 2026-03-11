@@ -4,11 +4,46 @@ A set of tools to identify geo problems and improve them.
 
 > "GEO" = **Geo-Optimized/SEO for AI** - optimizing web content so AI/RAG systems can correctly parse, understand, and represent your project.
 
-## Quick Start
+初始目标社区：**MindSpore**。
+
+## 系统架构
+
+本系统是一个由 Claude Code 驱动的 **Skill 链式流水线**，纯 CLI 运行，无 Web 界面。
+
+4 步流水线，每步对应一个独立 Skill：
+
+```
+questions.json        responses.json        scores.json        suggestions.json
+     │                     │                     │                     │
+     ▼                     ▼                     ▼                     ▼
+┌──────────┐     ┌──────────────┐     ┌──────────────┐     ┌──────────────────┐
+│ keyword  │────▶│   platform   │────▶│   scoring    │────▶│   improvement    │
+│ generator│     │   sampler    │     │   engine     │     │   advisor        │
+└──────────┘     └──────────────┘     └──────────────┘     └──────────────────┘
+  生成问题集         采样 AI 平台          评分诊断            生成改进建议
+```
+
+**数据流**：Skill 之间通过 JSON 文件传递数据，同时输出 Markdown 供人工审阅。
+
+
+## 快速开始
+
+### 1. 配置 API Token
 
 ```bash
-# To be added
+cp .env.example .env
+# 编辑 .env，填入各平台的 API Key
 ```
+
+需要配置的平台：Perplexity、OpenAI、DeepSeek、豆包（火山引擎）、通义千问（阿里云百炼）、Kimi（月之暗面）。
+
+### 2. 准备手动问题（可选）
+
+创建 `manual-questions.md`，按 Markdown 格式编写社区相关问题。
+
+### 3. 运行 Skill
+
+在 Claude Code 中按顺序调用各 Skill，每步产出的 JSON 文件作为下一步的输入。
 
 ## Project Structure
 
@@ -20,7 +55,63 @@ georadar/
 │   └── mindspore-geo-diagnosis.md
 └── src/                   # Source code (to be added)
 ```
+| 文件 | 用途 |
+|------|------|
+| `GEO搜索能力诊断-初步设计方案.md` | 完整设计文档 |
+| `.env.example` | API Token 配置模板（6 个平台） |
+| `CLAUDE.md` | Claude Code 开发规则 |
+| `CLAUDE-RESUME.md` | 会话恢复文件，记录项目状态和待办 |
+| `CHANGELOG.md` | 变更日志，由 `/release-skills` 自动维护 |
 
 ## Examples
 
 - [MindSpore GEO Diagnosis](./examples/mindspore-geo-diagnosis.md)
+
+## 使用 Claude Code 开发
+
+本仓库使用 [Claude Code](https://claude.ai/code) 作为主要开发工具，配置了自动化工作流和会话恢复机制。
+
+### CLAUDE-RESUME.md —— 会话恢复
+
+每次开启新的 Claude Code 会话时，Claude 会自动读取 `CLAUDE-RESUME.md` 来恢复项目上下文，无需重复说明背景。
+
+该文件包含以下段落，**每次任务完成后自动更新**：
+
+- **Project Overview** — 项目概述和架构
+- **Current Status** — 当前开发阶段
+- **TODO** — 待办事项清单
+- **Recent Changes** — 近期变更记录
+- **Key Decisions** — 已确定的关键决策
+
+**约束**：
+- 不要手动编辑此文件，由 Claude Code 自动维护
+- 如需修正内容，在会话中告知 Claude 更新即可
+
+### /release-skills —— 发布与变更日志
+
+在 Claude Code 中执行 `/release-skills`，自动完成版本管理和 CHANGELOG.md 更新。
+
+```
+/release-skills              # 自动检测版本变更
+/release-skills --dry-run    # 仅预览，不执行
+/release-skills --major      # 强制主版本号升级
+/release-skills --minor      # 强制次版本号升级
+/release-skills --patch      # 强制补丁版本号升级
+```
+
+**约束**：
+- 每次 git commit 前**必须**先执行 `/release-skills` 更新 CHANGELOG.md
+
+### /skill-creator —— 创建新 Skill
+
+在 Claude Code 中执行 `/skill-creator`，按照规范模版创建新的 skill。
+
+**约束**：
+- 创建新 skill 时**必须**使用 `/skill-creator`，不允许手动创建
+- `SKILL.md` 主体逻辑不超过 500 行，超出部分拆分到 `references/`
+- `name` 仅允许小写字母、数字和单连字符，1-64 字符
+- `description` 不超过 1024 字符，使用第三人称，包含反向触发条件
+
+## License
+
+MIT
