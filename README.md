@@ -1,6 +1,8 @@
-# GEO Search Assessment
+# georadar
 
-GEO（Generative Engine Optimization）搜索能力诊断系统 —— 自动评估开源社区在主流 AI 搜索平台中的表现，并生成可执行的改进建议。
+A set of tools to identify geo problems and improve them.
+
+> "GEO" = **Geo-Optimized/SEO for AI** - optimizing web content so AI/RAG systems can correctly parse, understand, and represent your project.
 
 初始目标社区：**MindSpore**。
 
@@ -43,8 +45,16 @@ cp .env.example .env
 
 在 Claude Code 中按顺序调用各 Skill，每步产出的 JSON 文件作为下一步的输入。
 
-## 项目文件
+## Project Structure
 
+```
+georadar/
+├── CLAUDE.md              # Project instructions
+├── README.md              # This file
+├── examples/              # Diagnosis reports
+│   └── mindspore-geo-diagnosis.md
+└── src/                   # Source code (to be added)
+```
 | 文件 | 用途 |
 |------|------|
 | `GEO搜索能力诊断-初步设计方案.md` | 完整设计文档 |
@@ -52,6 +62,10 @@ cp .env.example .env
 | `CLAUDE.md` | Claude Code 开发规则 |
 | `CLAUDE-RESUME.md` | 会话恢复文件，记录项目状态和待办 |
 | `CHANGELOG.md` | 变更日志，由 `/release-skills` 自动维护 |
+
+## Examples
+
+- [MindSpore GEO Diagnosis](./examples/mindspore-geo-diagnosis.md)
 
 ## 使用 Claude Code 开发
 
